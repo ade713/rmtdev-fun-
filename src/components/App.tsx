@@ -30,7 +30,7 @@ function App() {
   const totalNumberOfPages = totalNumberOfResults / RESULTS_PER_PAGE;
   const sliceStartIndex = currentPage * RESULTS_PER_PAGE - RESULTS_PER_PAGE;
   const sliceEndIndex = currentPage * RESULTS_PER_PAGE;
-  const jobItemsSorted = jobItems?.sort((a, b) => {
+  const jobItemsSorted = [...(jobItems || [])].sort((a, b) => {
     if (sortBy === 'relevant') {
       return b.relevanceScore - a.relevanceScore;
     } else {
