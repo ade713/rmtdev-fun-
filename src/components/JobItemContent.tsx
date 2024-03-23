@@ -18,6 +18,7 @@ export function JobItemContent() {
     daysAgo,
     description,
     duration,
+    id,
     location,
     qualifications,
     reviews,
@@ -47,7 +48,7 @@ export function JobItemContent() {
             <div className="job-info__below-badge">
               <time className="job-info__time">{daysAgo}d</time>
 
-              <BookmarkIcon />
+              <BookmarkIcon id={id} />
             </div>
           </div>
 
