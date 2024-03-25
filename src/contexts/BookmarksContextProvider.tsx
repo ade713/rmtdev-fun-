@@ -1,9 +1,11 @@
-import { createContext, useState } from "react";
+import { createContext, useEffect, useState } from "react";
 
 export const BookmarksContext = createContext(null);
 
 export function BookmarksContextProvider({ children }) {
-  const [bookmarkedIds, setBookmarkedIds] = useState<number[]>([]);
+  const [bookmarkedIds, setBookmarkedIds] = useState<number[]>(() =>
+    JSON.parse(localStorage.getItem("bookmarkedIds") || "[]")
+  );
   console.log(bookmarkedIds);
 
   const handleToggleBookmark = (id: number) => {
@@ -17,6 +19,10 @@ export function BookmarksContextProvider({ children }) {
       ));
     }
   }
+
+  useEffect(() => {
+    localStorage.setItem("bookmarkedIds", JSON.stringify(bookmarkedIds));
+  }, [bookmarkedIds]);
 
   return (
     <BookmarksContext.Provider
