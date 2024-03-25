@@ -14,12 +14,15 @@ export function BookmarkIcon({
     handleToggleBookmark,
   } = useContext(BookmarksContext);
 
-  const handleClickBookmark = (id: number) => {
+  const handleClickBookmark = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+    e.preventDefault();
+    e.stopPropagation();
+
     handleToggleBookmark(id);
   }
 
   return (
-    <button className="bookmark-btn" onClick={() => handleClickBookmark(id)}>
+    <button className="bookmark-btn" onClick={handleClickBookmark}>
       <BookmarkFilledIcon
         className={`
           ${bookmarkedIds.includes(id) ? "filled" : ""}
