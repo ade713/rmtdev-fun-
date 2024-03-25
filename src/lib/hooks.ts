@@ -83,7 +83,7 @@ export const useJobItems = (ids: number[]) => {
       refetchOnWindowFocus: false,
       retry: false,
       enabled: Boolean(id),
-      onError: (error) => handleError(error),
+      onError: handleError,
     })),
   });
 
