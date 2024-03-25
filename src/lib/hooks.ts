@@ -7,13 +7,13 @@ import { handleError } from "./utils";
 type JobItemApiResponse = {
   public: boolean;
   jobItem: TJobItemExpanded;
-}
+};
 
 type JobItemsApiResponse = {
   jobItems: TJobItem[];
   public: boolean,
   sorted: boolean,
-}
+};
 
 const fetchJobItems = async (searchText: string): Promise<JobItemsApiResponse> => {
   const response = await fetch(`${BASE_API_URL}?search=${searchText}`);
@@ -26,7 +26,7 @@ const fetchJobItems = async (searchText: string): Promise<JobItemsApiResponse> =
 
   const data = await response.json();
   return data;
-}
+};
 
 export const useJobItems = (searchText: string) => {
   const { data, isInitialLoading } = useQuery(
@@ -103,4 +103,16 @@ export const useDebounce = <T>(value: T, delay = 500): T => {
   }, [value, delay]);
 
   return debouncedValue;
-}
+};
+
+export const useLocalStorage = <T>(key: string, initialValue: T): [T, React.Dispatch<React.SetStateAction<T>>] => {
+  const [value, setValue] = useState(() =>
+    JSON.parse(localStorage.getItem(key) || JSON.stringify(initialValue))
+  );
+
+  useEffect(() => {
+    localStorage.setItem(key, JSON.stringify(value));
+  }, [value, key]);
+
+  return [value, setValue] as const;
+};
