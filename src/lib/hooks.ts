@@ -1,7 +1,7 @@
 import { useState, useEffect, useContext } from "react";
 import { TJobItem, TJobItemExpanded } from "./types";
 import { BASE_API_URL } from "./constants";
-import { useQuery } from "@tanstack/react-query";
+import { useQueries, useQuery } from "@tanstack/react-query";
 import { handleError } from "./utils";
 import { BookmarksContext } from "../contexts/BookmarksContextProvider";
 
@@ -29,7 +29,7 @@ const fetchJobItems = async (searchText: string): Promise<JobItemsApiResponse> =
   return data;
 };
 
-export const useJobItems = (searchText: string) => {
+export const useSearchQuery = (searchText: string) => {
   const { data, isInitialLoading } = useQuery(
     ['job-items', searchText],
     () => fetchJobItems(searchText),
@@ -73,6 +73,29 @@ export const useJobItem = (id: number | null) => {
   
   return { jobItem: data?.jobItem, isLoading: isInitialLoading } as const;
 }
+
+export const useJobItems = (ids: number[]) => {
+  const results = useQueries({
+    queries: ids.map(id => ({
+      queryKey: ['job-item', id],
+      queryFn: () => fetchJobItem(id),
+      staleTime: 1000 * 60 * 60,
+      refetchOnWindowFocus: false,
+      retry: false,
+      enabled: Boolean(id),
+      onError: (error) => handleError(error),
+    })),
+  });
+
+  const jobItems = results
+    .map(result => result.data?.jobItem)
+    .filter(jobItem => jobItem !== undefined) as TJobItemExpanded[]; // cast type since undefined is filtered from array
+  const isLoading = results.some(result => result.isLoading);
+
+  return { jobItems, isLoading } as const;
+};
+
+//-----------------------------------------------------------------------------
 
 export const useActiveId = () => {
   const [activeId, setActiveId] = useState<number | null>(null);
