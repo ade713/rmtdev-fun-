@@ -1,9 +1,16 @@
 import { createContext, useEffect } from "react";
 import { useLocalStorage } from "../lib/hooks";
 
-export const BookmarksContext = createContext(null);
+type TBookmarksContext = {
+  bookmarkedIds: number[];
+  handleToggleBookmark: (id: number) => void;
+}
 
-export function BookmarksContextProvider({ children }) {
+export const BookmarksContext = createContext<TBookmarksContext | null>(null);
+
+export function BookmarksContextProvider({ children }: {
+  children: React.ReactNode
+}) {
   const [bookmarkedIds, setBookmarkedIds] = useLocalStorage<number[]>("bookmarkedIds", []);
 
   const handleToggleBookmark = (id: number) => {
