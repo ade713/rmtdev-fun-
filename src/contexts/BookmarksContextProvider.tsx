@@ -6,7 +6,6 @@ export function BookmarksContextProvider({ children }) {
   const [bookmarkedIds, setBookmarkedIds] = useState<number[]>(() =>
     JSON.parse(localStorage.getItem("bookmarkedIds") || "[]")
   );
-  console.log(bookmarkedIds);
 
   const handleToggleBookmark = (id: number) => {
     if (bookmarkedIds.includes(id)) {
