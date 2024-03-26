@@ -6,6 +6,7 @@ import { handleError } from "./utils";
 import { BookmarksContext } from "../contexts/BookmarksContextProvider";
 import { ActiveIdContext } from "../contexts/ActiveIdContextProvider";
 import { SearchTextContext } from "../contexts/SearchTextContextProvider";
+import { JobItemsContext } from "../contexts/JobItemsContextProvider";
 
 type JobItemApiResponse = {
   public: boolean;
@@ -191,6 +192,18 @@ export const useSearchTextContext = () => {
   if (!context) {
     throw new Error(
       "useSearchTextContext must be used within a SearchTextContextProvider"
+    );
+  }
+
+  return context;
+};
+
+export const useJobItemsContext = () => {
+  const context = useContext(JobItemsContext);
+
+  if (!context) {
+    throw new Error(
+      "useJobItemsContext must be used within a JobItemsContextProvider"
     );
   }
 
